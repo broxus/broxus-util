@@ -2,6 +2,10 @@ use std::ffi::{c_void, CString};
 
 pub type Allocator = tikv_jemallocator::Jemalloc;
 
+pub const fn allocator() -> Allocator {
+    Allocator {}
+}
+
 pub fn set_jemalloc_param<T>(name: &str, mut value: T) {
     let name_buffer = CString::new(name).unwrap();
 
