@@ -8,6 +8,8 @@ pub use self::time::*;
 #[cfg(feature = "web")]
 pub use self::web::*;
 
+#[cfg(feature = "alloc")]
+pub mod alloc;
 #[cfg(feature = "config")]
 mod config;
 #[cfg(feature = "log4rs")]

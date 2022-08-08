@@ -24,5 +24,7 @@ A collection of utils used at Broxus.
 - `config` - config parser with environment variables injection
 - `log4rs` - custom logger initialization
 - `web` - error converters and object builder
+- `alloc` - jemalloc allocator
+- `alloc-profiling` - profiling tools for jemalloc
 
 > Default: `serde`, `config`, `log4rs`
