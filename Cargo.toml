@@ -3,7 +3,7 @@ name = "broxus-util"
 description = "A collection of utils used at Broxus"
 authors = ["Ivan Kalinin <i.kalinin@dexpa.io>"]
 repository = "https://github.com/broxus/broxus-util"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 rust-version = "1.60"
 license = "MIT"
@@ -16,6 +16,7 @@ hex = { version = "0.4", optional = true }
 js-sys = { version = "0.3", optional = true }
 log = { version = "0.4", optional = true }
 log4rs = { version = "1.1.1", optional = true }
+public-ip = { version = "0.2", optional = true }
 regex = { version = "1.6.0", optional = true }
 serde = { version = "1.0", features = ["derive"], optional = true }
 serde_yaml = { version = "0.9.4", optional = true }
@@ -39,3 +40,4 @@ log4rs = ["dep:log4rs", "dep:serde_yaml", "dep:thiserror", "dep:log"]
 web = ["dep:js-sys", "dep:wasm-bindgen"]
 alloc = ["dep:tikv-jemalloc-sys", "dep:tikv-jemallocator", "dep:log", "dep:errno"]
 alloc-profiling = ["alloc", "dep:tikv-jemalloc-ctl", "tikv-jemalloc-sys?/profiling", "tikv-jemallocator?/profiling", "dep:log", "dep:thiserror"]
+public-ip = ["dep:public-ip", "dep:thiserror"]

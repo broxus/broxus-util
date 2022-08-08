@@ -2,6 +2,8 @@
 pub use self::config::*;
 #[cfg(feature = "log4rs")]
 pub use self::log4rs::*;
+#[cfg(feature = "public-ip")]
+pub use self::public_ip::*;
 #[cfg(feature = "serde")]
 pub use self::serde_helpers::*;
 pub use self::time::*;
@@ -14,6 +16,8 @@ pub mod alloc;
 mod config;
 #[cfg(feature = "log4rs")]
 mod log4rs;
+#[cfg(feature = "public-ip")]
+mod public_ip;
 #[cfg(feature = "serde")]
 mod serde_helpers;
 mod time;
