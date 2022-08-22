@@ -41,3 +41,6 @@ web = ["dep:js-sys", "dep:wasm-bindgen"]
 alloc = ["dep:tikv-jemalloc-sys", "dep:tikv-jemallocator", "dep:log", "dep:errno"]
 alloc-profiling = ["alloc", "dep:tikv-jemalloc-ctl", "tikv-jemalloc-sys?/profiling", "tikv-jemallocator?/profiling", "dep:log", "dep:thiserror"]
 public-ip = ["dep:public-ip", "dep:thiserror"]
+
+[package.metadata.docs.rs]
+all-features = true
