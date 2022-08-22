@@ -155,12 +155,11 @@ pub mod serde_duration_ms {
 pub mod serde_base64_array {
     use super::*;
 
-    pub fn serialize<S, T>(data: T, serializer: S) -> Result<S::Ok, S::Error>
+    pub fn serialize<S>(data: &dyn AsRef<[u8]>, serializer: S) -> Result<S::Ok, S::Error>
     where
-        T: AsRef<[u8]> + Sized,
         S: serde::Serializer,
     {
-        serde_base64_bytes::serialize(data.as_ref(), serializer)
+        serde_base64_bytes::serialize(data, serializer)
     }
 
     pub fn deserialize<'de, D, const N: usize>(deserializer: D) -> Result<[u8; N], D::Error>
@@ -176,9 +175,8 @@ pub mod serde_base64_array {
 pub mod serde_hex_array {
     use super::*;
 
-    pub fn serialize<S, T>(data: T, serializer: S) -> Result<S::Ok, S::Error>
+    pub fn serialize<S>(data: &dyn AsRef<[u8]>, serializer: S) -> Result<S::Ok, S::Error>
     where
-        T: AsRef<[u8]> + Sized,
         S: serde::Serializer,
     {
         serde_hex_bytes::serialize(data, serializer)
@@ -329,9 +327,8 @@ pub mod serde_hex_bytes {
 
     use super::*;
 
-    pub fn serialize<S, T>(data: T, serializer: S) -> Result<S::Ok, S::Error>
+    pub fn serialize<S>(data: &dyn AsRef<[u8]>, serializer: S) -> Result<S::Ok, S::Error>
     where
-        T: AsRef<[u8]> + Sized,
         S: serde::Serializer,
     {
         if serializer.is_human_readable() {
@@ -407,9 +404,8 @@ pub mod serde_base64_bytes {
 
     use super::*;
 
-    pub fn serialize<S, T>(data: T, serializer: S) -> Result<S::Ok, S::Error>
+    pub fn serialize<S>(data: &dyn AsRef<[u8]>, serializer: S) -> Result<S::Ok, S::Error>
     where
-        T: AsRef<[u8]> + Sized,
         S: serde::Serializer,
     {
         if serializer.is_human_readable() {
