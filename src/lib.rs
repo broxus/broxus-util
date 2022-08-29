@@ -6,6 +6,8 @@ pub use self::log4rs::*;
 pub use self::public_ip::*;
 #[cfg(feature = "serde")]
 pub use self::serde_helpers::*;
+#[cfg(feature = "signal")]
+pub use self::signal::*;
 pub use self::time::*;
 #[cfg(feature = "web")]
 pub use self::web::*;
@@ -20,6 +22,8 @@ mod log4rs;
 mod public_ip;
 #[cfg(feature = "serde")]
 mod serde_helpers;
+#[cfg(feature = "signal")]
+mod signal;
 mod time;
 #[cfg(feature = "web")]
 mod web;
