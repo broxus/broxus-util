@@ -6,6 +6,29 @@ use std::time::Duration;
 use serde::de::{Error, Visitor};
 use serde::{Deserialize, Serialize};
 
+macro_rules! declare_const_helpers {
+    ($($name:ident => $ty:ty),*$(,)?) => {
+        $(pub const fn $name<const N: $ty>() -> $ty {
+            N
+        })*
+    };
+}
+
+declare_const_helpers!(
+    const_bool => bool,
+    const_usize => usize,
+    const_i8 => i8,
+    const_u8 => u8,
+    const_i16 => i16,
+    const_u16 => u16,
+    const_i32 => i32,
+    const_u32 => u32,
+    const_i64 => i64,
+    const_u64 => u64,
+    const_i128 => i128,
+    const_u128 => u128,
+);
+
 pub trait JsonNumberRepr {
     #[inline(always)]
     fn fits_into_number(&self) -> bool {
@@ -244,7 +267,7 @@ pub mod serde_string {
         T: FromStr,
         T::Err: fmt::Display,
     {
-        String::deserialize(deserializer).and_then(|data| T::from_str(&data).map_err(Error::custom))
+        <&str>::deserialize(deserializer).and_then(|data| T::from_str(data).map_err(Error::custom))
     }
 }
 
@@ -265,8 +288,8 @@ pub mod serde_optional_string {
         T: FromStr,
         T::Err: fmt::Display,
     {
-        Option::<String>::deserialize(deserializer).and_then(|data| {
-            data.map(|data| T::from_str(&data).map_err(Error::custom))
+        Option::<&str>::deserialize(deserializer).and_then(|data| {
+            data.map(|data| T::from_str(data).map_err(Error::custom))
                 .transpose()
         })
     }
@@ -293,7 +316,7 @@ pub mod serde_string_array {
         D: serde::Deserializer<'de>,
         <T as FromStr>::Err: fmt::Display,
     {
-        let s = String::deserialize(deserializer)?;
+        let s = <&str>::deserialize(deserializer)?;
         if s.contains(',') {
             let mut v = Vec::new();
             for url in s.split(',') {
@@ -301,7 +324,7 @@ pub mod serde_string_array {
             }
             Ok(v)
         } else {
-            Ok(vec![T::from_str(&s).map_err(Error::custom)?])
+            Ok(vec![T::from_str(s).map_err(Error::custom)?])
         }
     }
 }
