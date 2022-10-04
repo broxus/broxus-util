@@ -29,6 +29,14 @@ declare_const_helpers!(
     const_u128 => u128,
 );
 
+pub const fn const_duration_sec<const N: u64>() -> Duration {
+    Duration::from_secs(N)
+}
+
+pub const fn const_duration_ms<const N: u64>() -> Duration {
+    Duration::from_millis(N)
+}
+
 pub trait JsonNumberRepr {
     #[inline(always)]
     fn fits_into_number(&self) -> bool {
