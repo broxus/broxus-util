@@ -141,7 +141,7 @@ mod test {
         profiling::start().unwrap();
         assert!(is_profiling_on());
 
-        profiling::dump(&path.as_path()).unwrap();
+        profiling::dump(path.as_path()).unwrap();
         profiling::stop().unwrap();
     }
 }

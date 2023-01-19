@@ -1,3 +1,4 @@
+use std::borrow::Cow;
 use std::convert::TryInto;
 use std::fmt;
 use std::str::FromStr;
@@ -275,7 +276,8 @@ pub mod serde_string {
         T: FromStr,
         T::Err: fmt::Display,
     {
-        <&str>::deserialize(deserializer).and_then(|data| T::from_str(data).map_err(Error::custom))
+        <Cow<&str>>::deserialize(deserializer)
+            .and_then(|data| T::from_str(data.as_ref()).map_err(Error::custom))
     }
 }
 
@@ -296,8 +298,8 @@ pub mod serde_optional_string {
         T: FromStr,
         T::Err: fmt::Display,
     {
-        Option::<&str>::deserialize(deserializer).and_then(|data| {
-            data.map(|data| T::from_str(data).map_err(Error::custom))
+        Option::<Cow<&str>>::deserialize(deserializer).and_then(|data| {
+            data.map(|data| T::from_str(data.as_ref()).map_err(Error::custom))
                 .transpose()
         })
     }
@@ -324,7 +326,8 @@ pub mod serde_string_array {
         D: serde::Deserializer<'de>,
         <T as FromStr>::Err: fmt::Display,
     {
-        let s = <&str>::deserialize(deserializer)?;
+        let s = <Cow<&str>>::deserialize(deserializer)?;
+        let s = s.as_ref();
         if s.contains(',') {
             let mut v = Vec::new();
             for url in s.split(',') {
@@ -363,7 +366,7 @@ pub mod serde_hex_bytes {
         S: serde::Serializer,
     {
         if serializer.is_human_readable() {
-            serializer.serialize_str(hex::encode(&data.as_ref()).as_str())
+            serializer.serialize_str(hex::encode(data).as_str())
         } else {
             serializer.serialize_bytes(data.as_ref())
         }
@@ -440,7 +443,7 @@ pub mod serde_base64_bytes {
         S: serde::Serializer,
     {
         if serializer.is_human_readable() {
-            serializer.serialize_str(base64::encode(&data.as_ref()).as_str())
+            serializer.serialize_str(base64::encode(data).as_str())
         } else {
             serializer.serialize_bytes(data.as_ref())
         }
@@ -529,6 +532,29 @@ pub mod serde_iter {
 mod test {
     use super::*;
     use serde::{Deserialize, Serialize};
+
+    #[test]
+    fn test_string_or_number() {
+        #[derive(Serialize, Deserialize, Eq, PartialEq, Debug)]
+        struct Test {
+            #[serde(with = "serde_string_or_number")]
+            value: u64,
+        }
+
+        let test = Test { value: 123123 };
+        let data = serde_json::to_string(&test).unwrap();
+        assert_eq!(data, r#"{"value":123123}"#);
+        assert_eq!(serde_json::from_str::<Test>(&data).unwrap(), test);
+
+        let data = r#"{"value":"123123"}"#;
+        assert_eq!(serde_json::from_str::<Test>(data).unwrap(), test);
+
+        let test = Test {
+            value: 0xffffffffffffffff,
+        };
+        let data = serde_json::to_string(&test).unwrap();
+        assert_eq!(data, r#"{"value":"18446744073709551615"}"#);
+    }
 
     #[test]
     fn test_hex() {
