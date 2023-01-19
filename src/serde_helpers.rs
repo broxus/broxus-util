@@ -276,8 +276,8 @@ pub mod serde_string {
         T: FromStr,
         T::Err: fmt::Display,
     {
-        <Cow<&str>>::deserialize(deserializer)
-            .and_then(|data| T::from_str(data.as_ref()).map_err(Error::custom))
+        <BorrowedStr>::deserialize(deserializer)
+            .and_then(|data| T::from_str(data.0.as_ref()).map_err(Error::custom))
     }
 }
 
@@ -298,8 +298,8 @@ pub mod serde_optional_string {
         T: FromStr,
         T::Err: fmt::Display,
     {
-        Option::<Cow<&str>>::deserialize(deserializer).and_then(|data| {
-            data.map(|data| T::from_str(data.as_ref()).map_err(Error::custom))
+        Option::<BorrowedStr>::deserialize(deserializer).and_then(|data| {
+            data.map(|data| T::from_str(data.0.as_ref()).map_err(Error::custom))
                 .transpose()
         })
     }
@@ -326,8 +326,7 @@ pub mod serde_string_array {
         D: serde::Deserializer<'de>,
         <T as FromStr>::Err: fmt::Display,
     {
-        let s = <Cow<&str>>::deserialize(deserializer)?;
-        let s = s.as_ref();
+        let BorrowedStr(s) = <_>::deserialize(deserializer)?;
         if s.contains(',') {
             let mut v = Vec::new();
             for url in s.split(',') {
@@ -335,7 +334,7 @@ pub mod serde_string_array {
             }
             Ok(v)
         } else {
-            Ok(vec![T::from_str(s).map_err(Error::custom)?])
+            Ok(vec![T::from_str(s.as_ref()).map_err(Error::custom)?])
         }
     }
 }
@@ -528,6 +527,9 @@ pub mod serde_iter {
     }
 }
 
+#[derive(Deserialize)]
+struct BorrowedStr<'a>(#[serde(borrow)] Cow<'a, str>);
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -554,6 +556,18 @@ mod test {
         };
         let data = serde_json::to_string(&test).unwrap();
         assert_eq!(data, r#"{"value":"18446744073709551615"}"#);
+    }
+
+    #[test]
+    fn test_changed_string() {
+        #[derive(Debug, Serialize, Deserialize)]
+        struct Test {
+            #[serde(with = "serde_string_array")]
+            value: Vec<String>,
+        }
+
+        let test: Test = serde_json::from_str("{\"value\":\"\\\"\"}").unwrap();
+        println!("{test:?}");
     }
 
     #[test]

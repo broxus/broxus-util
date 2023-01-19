@@ -3,7 +3,7 @@ name = "broxus-util"
 description = "A collection of utils used at Broxus"
 authors = ["Ivan Kalinin <i.kalinin@dexpa.io>"]
 repository = "https://github.com/broxus/broxus-util"
-version = "0.2.1"
+version = "0.2.2"
 edition = "2021"
 rust-version = "1.60"
 license = "MIT"
@@ -28,6 +28,7 @@ serde_yaml = { version = "0.9.4", optional = true }
 thiserror = { version = "1.0", optional = true }
 tokio = { version = "1", features = ["signal"], optional = true }
 wasm-bindgen = { version = "0.2", optional = true }
+url = { version = "2", features = ["serde"] }
 
 tikv-jemalloc-ctl = { version = "0.5", optional = true }
 tikv-jemalloc-sys = { version = "0.5", features = [
