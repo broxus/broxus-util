@@ -3,12 +3,13 @@ name = "broxus-util"
 description = "A collection of utils used at Broxus"
 authors = ["Ivan Kalinin <i.kalinin@dexpa.io>"]
 repository = "https://github.com/broxus/broxus-util"
-version = "0.2.2"
+version = "0.2.3"
 edition = "2021"
-rust-version = "1.60"
+rust-version = "1.65"
 license = "MIT"
 
 [dependencies]
+argh = { version = "0.1", optional = true }
 base64 = { version = "0.13", optional = true }
 config = { version = "0.13.2", default-features = false, features = [
     "json",
@@ -47,6 +48,7 @@ tempfile = "3.3"
 
 [features]
 default = ["serde", "config", "log4rs"]
+argh = ["dep:argh"]
 serde = ["dep:base64", "dep:hex", "dep:serde"]
 config = ["dep:config", "dep:regex", "dep:serde", "dep:thiserror"]
 log4rs = ["dep:log4rs", "dep:serde_yaml", "dep:thiserror", "dep:log"]

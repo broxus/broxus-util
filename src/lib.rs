@@ -1,3 +1,5 @@
+#[cfg(feature = "argh")]
+pub use self::argh::*;
 #[cfg(feature = "config")]
 pub use self::config::*;
 #[cfg(feature = "log4rs")]
@@ -14,6 +16,8 @@ pub use self::web::*;
 
 #[cfg(feature = "alloc")]
 pub mod alloc;
+#[cfg(feature = "argh")]
+mod argh;
 #[cfg(feature = "config")]
 mod config;
 #[cfg(feature = "log4rs")]

@@ -1,26 +1,27 @@
-## broxus-util &emsp; [![Latest Version]][crates.io] [![broxus-util: rustc 1.60+]][Rust 1.60] [![Workflow badge]][Workflow] [![License MIT badge]][License MIT]
+# broxus-util &emsp; [![crates-io-batch]][crates-io-link] [![docs-badge]][docs-url] [![rust-version-badge]][rust-version-link] [![workflow-badge]][workflow-link]
 
-[Latest Version]: https://img.shields.io/crates/v/broxus-util.svg
+[crates-io-batch]: https://img.shields.io/crates/v/broxus-util.svg
 
-[crates.io]: https://crates.io/crates/broxus-util
+[crates-io-link]: https://crates.io/crates/broxus-util
 
-[broxus-util: rustc 1.60+]: https://img.shields.io/badge/rustc-1.60+-lightgray.svg
+[docs-badge]: https://docs.rs/broxus-util/badge.svg
 
-[Rust 1.60]: https://blog.rust-lang.org/2022/04/07/Rust-1.60.0.html
+[docs-url]: https://docs.rs/broxus-util
 
-[Workflow badge]: https://img.shields.io/github/workflow/status/broxus/broxus-util/master
+[rust-version-badge]: https://img.shields.io/badge/rustc-1.65+-lightgray.svg
 
-[Workflow]: https://github.com/broxus/broxus-util/actions?query=workflow%3Amaster
+[rust-version-link]: https://blog.rust-lang.org/2022/11/03/Rust-1.65.0.html
 
-[License MIT badge]: https://img.shields.io/badge/license-MIT-blue.svg
+[workflow-badge]: https://img.shields.io/github/actions/workflow/status/broxus/broxus-util/master.yml?branch=master
 
-[License MIT]: https://opensource.org/licenses/MIT
+[workflow-link]: https://github.com/broxus/broxus-util/actions?query=workflow%3Amaster
 
 A collection of utils used at Broxus.
 
-### Features
+## Features
 
-- `serde` - various serde helpers
+- `argh` - [`argh`](https://crates.io/crates/argh) helpers
+- `serde` - various [`serde`](https://crates.io/crates/serde) helpers
 - `config` - config parser with environment variables injection
 - `log4rs` - custom logger initialization
 - `web` - error converters and object builder
@@ -28,3 +29,11 @@ A collection of utils used at Broxus.
 - `alloc-profiling` - profiling tools for jemalloc
 
 > Default: `serde`, `config`, `log4rs`
+
+## Contributing
+
+We welcome contributions to the project! If you notice any issues or errors, feel free to open an issue or submit a pull request.
+
+## License
+
+This project is licensed under the [MIT License](https://opensource.org/license/mit/).
