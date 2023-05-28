@@ -111,13 +111,13 @@ where
         #[derive(Deserialize)]
         #[serde(untagged)]
         enum Value<'a, T> {
-            String(&'a str),
+            String(#[serde(borrow)] Cow<'a, str>),
             Number(T),
         }
 
         if deserializer.is_human_readable() {
             match Value::deserialize(deserializer)? {
-                Value::String(str) => T::from_str(str)
+                Value::String(str) => T::from_str(str.as_ref())
                     .map(Self)
                     .map_err(|_| Error::custom("Invalid number")),
                 Value::Number(value) => Ok(Self(value)),
