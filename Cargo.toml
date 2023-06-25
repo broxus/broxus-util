@@ -3,7 +3,7 @@ name = "broxus-util"
 description = "A collection of utils used at Broxus"
 authors = ["Ivan Kalinin <i.kalinin@dexpa.io>"]
 repository = "https://github.com/broxus/broxus-util"
-version = "0.2.4"
+version = "0.2.5"
 edition = "2021"
 rust-version = "1.65"
 license = "MIT"
@@ -15,7 +15,7 @@ config = { version = "0.13.2", default-features = false, features = [
     "json",
     "yaml",
 ], optional = true }
-errno = { version = "0.2", optional = true }
+errno = { version = "0.3.1", optional = true }
 futures-util = { version = "0.3", optional = true }
 hex = { version = "0.4", optional = true }
 js-sys = { version = "0.3", optional = true }
