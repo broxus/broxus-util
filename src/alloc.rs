@@ -58,9 +58,11 @@ pub mod profiling {
             resident: stats::resident::read()? as u64,
             mapped: stats::mapped::read()? as u64,
             retained: stats::retained::read()? as u64,
-            dirty: (stats::resident::read()? - stats::active::read()? - stats::metadata::read()?)
+            dirty: (stats::resident::read()?
+                .saturating_sub(stats::active::read()?)
+                .saturating_sub(stats::metadata::read()?)) as u64,
+            fragmentation: (stats::active::read()?.saturating_sub(stats::allocated::read()?))
                 as u64,
-            fragmentation: (stats::active::read()? - stats::allocated::read()?) as u64,
         })
     }
 
