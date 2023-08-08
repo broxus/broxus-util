@@ -148,6 +148,29 @@ pub mod serde_string_or_number {
     }
 }
 
+pub mod serde_optional_string_or_number {
+    use super::*;
+
+    pub fn serialize<S, T>(data: &Option<T>, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+        T: JsonNumberRepr + Serialize + fmt::Display,
+    {
+        match data {
+            Some(data) => serializer.serialize_some(&StringOrNumber(data)),
+            None => serializer.serialize_none(),
+        }
+    }
+
+    pub fn deserialize<'de, D, T>(deserializer: D) -> Result<Option<T>, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+        T: FromStr + Deserialize<'de>,
+    {
+        Option::<StringOrNumber<T>>::deserialize(deserializer).map(|x| x.map(|StringOrNumber(x)| x))
+    }
+}
+
 pub mod serde_duration_sec {
     use super::*;
 
