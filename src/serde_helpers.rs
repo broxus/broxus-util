@@ -156,7 +156,7 @@ pub mod serde_string_or_number_optional {
         T: JsonNumberRepr + Serialize + fmt::Display,
     {
         match data {
-            Some(data) => StringOrNumber(data).serialize(serializer),
+            Some(data) => serializer.serialize_some(&StringOrNumber(data)),
             None => serializer.serialize_none(),
         }
     }
