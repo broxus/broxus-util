@@ -47,6 +47,32 @@ pub mod profiling {
         pub fragmentation: u64,
     }
 
+    #[cfg(feature = "metrics")]
+    macro_rules! set_metrics {
+    ($($metric_name:expr => $metric_value:expr),* $(,)?) => {
+        $(
+            metrics::gauge!($metric_name).set($metric_value as f64);
+        )*
+    };}
+
+    #[cfg(feature = "metrics")]
+    pub async fn allocator_metrics_loop() {
+        loop {
+            let Ok(s) = fetch_stats() else { break };
+            set_metrics!(
+                "jemalloc_allocated_bytes" => s.allocated,
+                "jemalloc_active_bytes" => s.active,
+                "jemalloc_metadata_bytes" => s.metadata,
+                "jemalloc_resident_bytes" => s.resident,
+                "jemalloc_mapped_bytes" => s.mapped,
+                "jemalloc_retained_bytes" => s.retained,
+                "jemalloc_dirty_bytes" => s.dirty,
+                "jemalloc_fragmentation_bytes" => s.fragmentation,
+            );
+            tokio::time::sleep(std::time::Duration::from_secs(5)).await;
+        }
+    }
+
     pub fn fetch_stats() -> Result<JemallocStats, Error> {
         // Stats are cached. Need to advance epoch to refresh.
         epoch::advance()?;
